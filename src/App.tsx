@@ -7,16 +7,44 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_50%_-20%,#1a1a2e_0%,#050508_70%)] bg-[#050508] font-sans text-white flex flex-col">
       {/* 1. 글로벌 탑바 (Global Top Bar) */}
-      <div className="w-full border-b border-white/10 bg-black/40 backdrop-blur-md hidden md:block">
-        <div className="max-w-[1200px] mx-auto px-4 h-10 flex items-center justify-between text-xs text-white/70 text-sm">
-          <div className="flex items-center gap-4 font-semibold">
+      <div className="w-full border-b border-white/10 bg-black/40 backdrop-blur-md relative z-10 shrink-0">
+        
+        {/* 모바일 버전 탑바 */}
+        <div className="md:hidden flex flex-col w-full">
+          <div className="flex items-center justify-between px-4 h-12 border-b border-white/5">
+            <span className="text-[#ff3e81] font-extrabold text-lg tracking-tighter flex items-center">
+              JBC<span className="bg-[#ff3e81] text-white px-1.5 py-[2px] rounded-[2px] ml-1.5 font-bold text-[9px] tracking-normal mb-0.5">Plus</span>
+            </span>
+            <div className="flex items-center gap-4 text-[13px] text-white/80 font-medium">
+              <a href="#" className="hover:text-white">로그인</a>
+              <div className="flex items-center gap-1 cursor-pointer">
+                <Globe className="w-3.5 h-3.5 text-[#ff3e81]" />
+                <span className="text-[10px]">▼</span>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center px-4 h-10 overflow-x-auto whitespace-nowrap scrollbar-hide text-[12px] text-white/70 gap-4">
+            <a href="#" className="hover:text-white">편성표</a>
+            <a href="#" className="hover:text-white">온에어</a>
+            <a href="#" className="hover:text-white">채널번호</a>
+            <span className="w-px h-3 bg-white/20"></span>
+            <a href="#" className="hover:text-white">JBC</a>
+            <a href="#" className="hover:text-white">스튜디오 프라임</a>
+          </div>
+        </div>
+
+        {/* 데스크탑 버전 탑바 */}
+        <div className="hidden md:flex max-w-[1200px] mx-auto px-4 h-10 items-center justify-between text-sm text-white/70">
+          <div className="flex items-center gap-4 font-semibold shrink-0">
             {/* 로고 자리 (예: SBS Plus) */}
-            <span className="text-[#ff3e81] font-extrabold text-lg mr-4 tracking-tighter">JBC<span className="bg-[#ff3e81] text-white px-1 py-[2px] rounded-[2px] ml-2 font-bold text-[10px] tracking-normal">Plus</span></span>
+            <span className="text-[#ff3e81] font-extrabold text-lg mr-4 tracking-tighter flex items-center">
+              JBC<span className="bg-[#ff3e81] text-white px-1 py-[2px] rounded-[2px] ml-2 font-bold text-[10px] tracking-normal mb-[2px]">Plus</span>
+            </span>
             <a href="#" className="hover:text-white border-r border-white/10 pr-4 transition-colors">편성표</a>
             <a href="#" className="hover:text-white border-r border-white/10 pr-4 transition-colors">온에어</a>
             <a href="#" className="hover:text-white transition-colors">채널번호</a>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 shrink-0">
             <a href="#" className="hover:text-white border-r border-white/10 pr-4 transition-colors">JBC</a>
             <a href="#" className="hover:text-white border-r border-white/10 pr-4 transition-colors">스튜디오 프라임</a>
             <a href="#" className="hover:text-white border-r border-white/10 pr-4 transition-colors">로그인</a>
