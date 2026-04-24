@@ -1,8 +1,34 @@
 import { useState } from 'react';
-import { ChevronRight, Globe, Search, PlayCircle, Terminal } from 'lucide-react';
+import { ChevronRight, Globe, Search, PlayCircle, Terminal, X, LockKeyhole, UnlockKeyhole } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('program');
+  const [showSecret, setShowSecret] = useState(false);
+  
+  const [posts, setPosts] = useState([
+    { id: 1248, title: '솔직히 한지오 저거 진짜로 당황한 표정 아님? ㅋㅋㅋ', author: 'ㅇㅇ', date: '10:42', views: 341, comments: 15 },
+    { id: 1247, title: '정아라 완전 비즈니스 모드 개웃기네 진짜 본받고 싶다', author: '알바생', date: '10:35', views: 210, comments: 8 },
+    { id: 1246, title: '근데 둘이 뭔가 초면 아닌 거 같은데 기분탓임?', author: '코난', date: '10:15', views: 952, comments: 42 },
+    { id: 1245, title: '한지오 무리수 두는거 보소 ㅋㅋㅋㅋ 하차 각이냐?', author: '불편러', date: '09:50', views: 88, comments: 0 },
+    { id: 1244, title: '둘이 오늘 티키타카 개재밌었음 ㅋㅋㅋ 다음주 예고편 미쳤다', author: '망붕러', date: '09:12', views: 142, comments: 5 },
+    { id: 1243, title: '혹시 작가가 안티냐? 대본 존나 매운맛이네 ㅋㅋㅋㅋ', author: '과몰입', date: '08:45', views: 425, comments: 11 }
+  ]);
+  const [showWriteModal, setShowWriteModal] = useState(false);
+  const [postInput, setPostInput] = useState('');
+
+  const handlePostSubmit = () => {
+    if (!postInput.trim()) return;
+    const newId = posts.length > 0 ? Math.max(...posts.map(p => p.id)) + 1 : 1;
+    const date = new Date();
+    const timeStr = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+    
+    setPosts([
+      { id: newId, title: postInput, author: '익명', date: timeStr, views: 0, comments: 0 },
+      ...posts
+    ]);
+    setPostInput('');
+    setShowWriteModal(false);
+  };
 
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_50%_-20%,#1a1a2e_0%,#050508_70%)] bg-[#050508] font-sans text-white flex flex-col">
@@ -138,14 +164,26 @@ export default function App() {
 
             {/* 실제 세계관 설정 (시청자 모름) */}
             <div className="border-t border-white/10 pt-10 relative z-10">
-              <h4 className="text-xl font-bold text-white/50 mb-4 flex items-center relative inline-block"><span className="absolute -left-6 top-1 text-red-500 font-bold text-2xl animate-pulse">!</span> [ 시작 설정: 1급 기밀 ]</h4>
-              <div className="bg-black/30 p-6 rounded-lg border border-red-500/20 text-white/60 text-[15px]">
-                <p className="text-red-400 font-bold mb-2">※ 극비 사항 (프로그램 스태프 외 열람 금지)</p>
-                <p>매칭된 메인 커플은 사실 <strong>4년을 사귀고 징글징글하게 깨진 진짜 전 연인!</strong></p>
-                <br/>
-                <p>카메라가 돌아갈 때는 시청률을 위해 환상의 커플을 연기하지만, 카메라가 꺼지거나 블랙룸 인터뷰에 들어가는 순간 곧바로 날선 공방전과 유치한 복수전이 시작됩니다!</p>
-                <p>시청자들은 두 사람의 아슬아슬한 케미에 열광하지만, 그 화면 뒤에는 미련, 애증, 그리고 100% 진짜 텐션이 함께 버무려져 있습니다.</p>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+                <h4 className="text-xl font-bold text-white/50 flex items-center relative inline-block"><span className="absolute -left-6 top-1 text-red-500 font-bold text-2xl animate-pulse">!</span> [ 시작 설정: 1급 기밀 ]</h4>
+                <button 
+                  onClick={() => setShowSecret(!showSecret)}
+                  className="flex items-center bg-black/50 border border-red-500/30 hover:border-red-500/70 hover:bg-red-500/10 text-red-400 px-4 py-2 rounded-full text-sm font-bold transition-all w-fit"
+                >
+                  {showSecret ? <UnlockKeyhole className="w-4 h-4 mr-2" /> : <LockKeyhole className="w-4 h-4 mr-2" />}
+                  {showSecret ? "기밀 문서 닫기" : "기밀 문서 열람하기 (클릭)"}
+                </button>
               </div>
+              
+              {showSecret && (
+                <div className="bg-black/30 p-6 rounded-lg border border-red-500/20 text-white/60 text-[15px] animate-in fade-in slide-in-from-top-4 duration-500">
+                  <p className="text-red-400 font-bold mb-2">※ 극비 사항 (프로그램 스태프 외 열람 금지)</p>
+                  <p>매칭된 메인 커플은 사실 <strong>4년을 사귀고 징글징글하게 깨진 진짜 전 연인!</strong></p>
+                  <br/>
+                  <p>카메라가 돌아갈 때는 시청률을 위해 환상의 커플을 연기하지만, 카메라가 꺼지거나 블랙룸 인터뷰에 들어가는 순간 곧바로 날선 공방전과 유치한 복수전이 시작됩니다!</p>
+                  <p>시청자들은 두 사람의 아슬아슬한 케미에 열광하지만, 그 화면 뒤에는 미련, 애증, 그리고 100% 진짜 텐션이 함께 버무려져 있습니다.</p>
+                </div>
+              )}
             </div>
             
             {/* 당신의 포지션 */}
@@ -393,7 +431,7 @@ export default function App() {
             <section className="mb-16">
               <div className="mb-6 flex justify-between items-center">
                  <h3 className="text-2xl font-bold text-white"><span className="text-[#ff3e81]">시청자</span> 익명 게시판</h3>
-                 <button className="bg-[#ff3e81] hover:bg-[#ff3e81]/80 text-white px-4 py-2 rounded text-sm font-bold transition-colors">글쓰기</button>
+                 <button onClick={() => setShowWriteModal(true)} className="bg-[#ff3e81] hover:bg-[#ff3e81]/80 text-white px-4 py-2 rounded text-sm font-bold transition-colors">글쓰기</button>
               </div>
 
               {/* 게시판 리스트 */}
@@ -416,48 +454,17 @@ export default function App() {
                       <td className="px-6 py-4 text-center hidden sm:table-cell">04-20</td>
                       <td className="px-6 py-4 text-center hidden sm:table-cell">1.2만</td>
                     </tr>
-                    <tr className="hover:bg-white/5 transition-colors cursor-pointer">
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">1248</td>
-                      <td className="px-6 py-4 text-white hover:text-[#ff3e81] transition-colors">솔직히 한지오 저거 진짜로 당황한 표정 아님? ㅋㅋㅋ <span className="text-[#ff3e81] text-xs font-bold">[15]</span></td>
-                      <td className="px-6 py-4 text-center">ㅇㅇ</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">10:42</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">341</td>
-                    </tr>
-                    <tr className="hover:bg-white/5 transition-colors cursor-pointer">
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">1247</td>
-                      <td className="px-6 py-4 text-white hover:text-[#ff3e81] transition-colors">정아라 완전 비즈니스 모드 개웃기네 진짜 본받고 싶다 <span className="text-[#ff3e81] text-xs font-bold">[8]</span></td>
-                      <td className="px-6 py-4 text-center">알바생</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">10:35</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">210</td>
-                    </tr>
-                    <tr className="hover:bg-white/5 transition-colors cursor-pointer">
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">1246</td>
-                      <td className="px-6 py-4 text-white hover:text-[#ff3e81] transition-colors">근데 둘이 뭔가 초면 아닌 거 같은데 기분탓임? <span className="text-[#ff3e81] text-xs font-bold">[42]</span></td>
-                      <td className="px-6 py-4 text-center">코난</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">10:15</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">952</td>
-                    </tr>
-                    <tr className="hover:bg-white/5 transition-colors cursor-pointer">
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">1245</td>
-                      <td className="px-6 py-4 text-white hover:text-[#ff3e81] transition-colors">한지오 무리수 두는거 보소 ㅋㅋㅋㅋ 하차 각이냐?</td>
-                      <td className="px-6 py-4 text-center">불편러</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">09:50</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">88</td>
-                    </tr>
-                    <tr className="hover:bg-white/5 transition-colors cursor-pointer">
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">1244</td>
-                      <td className="px-6 py-4 text-white hover:text-[#ff3e81] transition-colors">둘이 오늘 티키타카 개재밌었음 ㅋㅋㅋ 다음주 예고편 미쳤다 <span className="text-[#ff3e81] text-xs font-bold">[5]</span></td>
-                      <td className="px-6 py-4 text-center">망붕러</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">09:12</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">142</td>
-                    </tr>
-                    <tr className="hover:bg-white/5 transition-colors cursor-pointer">
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">1243</td>
-                      <td className="px-6 py-4 text-white hover:text-[#ff3e81] transition-colors">혹시 작가가 안티냐? 대본 존나 매운맛이네 ㅋㅋㅋㅋ <span className="text-[#ff3e81] text-xs font-bold">[11]</span></td>
-                      <td className="px-6 py-4 text-center">과몰입</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">08:45</td>
-                      <td className="px-6 py-4 text-center hidden sm:table-cell">425</td>
-                    </tr>
+                    {posts.map(post => (
+                      <tr key={post.id} className="hover:bg-white/5 transition-colors cursor-pointer animate-in fade-in duration-300">
+                        <td className="px-6 py-4 text-center hidden sm:table-cell">{post.id}</td>
+                        <td className="px-6 py-4 text-white hover:text-[#ff3e81] transition-colors">
+                          {post.title} {post.comments > 0 && <span className="text-[#ff3e81] text-xs font-bold ml-1">[{post.comments}]</span>}
+                        </td>
+                        <td className="px-6 py-4 text-center">{post.author}</td>
+                        <td className="px-6 py-4 text-center hidden sm:table-cell">{post.date}</td>
+                        <td className="px-6 py-4 text-center hidden sm:table-cell">{post.views}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -484,6 +491,39 @@ export default function App() {
               </div>
               <h3 className="text-2xl font-bold text-white mb-3">아직 방송 전입니다</h3>
               <p className="text-white/50 text-base leading-relaxed">첫 방송 이후 명장면 클립이 업데이트될 예정입니다.<br/>본방 사수를 놓치지 마세요!</p>
+            </div>
+          </div>
+        )}
+
+        {/* 커뮤니티 글쓰기 모달 */}
+        {showWriteModal && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-[#12121a] border border-[#ff3e81]/30 rounded-2xl w-full max-w-lg shadow-[0_0_50px_rgba(255,62,129,0.15)] overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+              <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
+                <h3 className="text-xl font-bold text-white">새 익명 글 쓰기</h3>
+                <button onClick={() => setShowWriteModal(false)} className="text-white/50 hover:text-white transition-colors">
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-white/60 mb-2">대화명</label>
+                  <input type="text" value="익명" disabled className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-2.5 text-white/50 cursor-not-allowed" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-white/60 mb-2">내용</label>
+                  <textarea 
+                    value={postInput}
+                    onChange={(e) => setPostInput(e.target.value)}
+                    placeholder="방송에 대한 자유로운 의견을 남겨주세요." 
+                    className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-3 text-white placeholder:text-white/30 focus:outline-none focus:border-[#ff3e81]/50 focus:ring-1 focus:ring-[#ff3e81]/50 min-h-[120px] resize-none transition-all"
+                  />
+                </div>
+              </div>
+              <div className="p-6 border-t border-white/5 bg-black/20 flex justify-end gap-3">
+                <button onClick={() => setShowWriteModal(false)} className="px-5 py-2.5 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors text-sm font-bold">취소</button>
+                <button onClick={handlePostSubmit} className="bg-[#ff3e81] hover:bg-[#ff3e81]/80 text-white px-5 py-2.5 rounded-lg text-sm font-bold transition-colors shadow-[0_0_15px_rgba(255,62,129,0.3)]">등록하기</button>
+              </div>
             </div>
           </div>
         )}
