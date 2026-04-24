@@ -533,7 +533,6 @@ export default function App() {
       <footer className="w-full bg-[#111] border-t border-white/5 mt-auto py-8">
         <div className="max-w-[1200px] mx-auto px-4 text-sm text-white/40">
           <p>© 2026 JBC Plus. All rights reserved.</p>
-          <p className="mt-2 text-xs">본 페이지는 데모 레이아웃입니다.</p>
         </div>
       </footer>
     </div>
